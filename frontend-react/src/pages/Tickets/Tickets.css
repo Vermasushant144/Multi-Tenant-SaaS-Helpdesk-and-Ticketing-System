@@ -1,0 +1,127 @@
+.tickets-page-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.tickets-header-card {
+  padding: 20px 24px;
+}
+
+.tickets-header-main {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+@media(min-width: 768px) {
+  .tickets-header-main {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.tickets-page-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 20px;
+  font-weight: 800;
+  color: #000000;
+  text-transform: uppercase;
+}
+
+.tickets-page-subtitle {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 800;
+  color: #666666;
+}
+
+.create-ticket-header-btn {
+  width: 100%;
+}
+
+@media(min-width: 768px) {
+  .create-ticket-header-btn {
+    width: auto;
+  }
+}
+
+.tickets-filters-card {
+  padding: 16px;
+}
+
+.filters-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+@media(min-width: 992px) {
+  .filters-grid {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.search-col {
+  flex-grow: 1;
+}
+
+.filter-select-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+@media(min-width: 576px) {
+  .filter-select-col {
+    flex-direction: row;
+  }
+}
+
+.filter-select-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: 4px solid #000000;
+  background-color: #ffffff;
+  padding-left: 12px;
+  flex-grow: 1;
+}
+
+.filter-icon {
+  color: #000000;
+  flex-shrink: 0;
+}
+
+.filter-select {
+  border: none !important;
+  background-color: transparent !important;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 10px 30px 10px 8px !important;
+  width: 100%;
+  cursor: pointer;
+  appearance: none;
+}
+
+.filter-select-wrapper::after {
+  content: "▼";
+  font-size: 10px;
+  position: absolute;
+  right: 12px;
+  pointer-events: none;
+  color: #000000;
+}
+
+@media(min-width: 992px) {
+  .filter-select-wrapper {
+    width: 200px;
+  }
+}

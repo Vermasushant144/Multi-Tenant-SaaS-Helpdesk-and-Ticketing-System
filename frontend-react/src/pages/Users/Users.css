@@ -1,0 +1,113 @@
+.users-page-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.users-header-card {
+  padding: 20px 24px;
+}
+
+.users-header-main {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+@media(min-width: 768px) {
+  .users-header-main {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.users-page-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 20px;
+  font-weight: 800;
+  color: #000000;
+}
+
+.users-page-subtitle {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 800;
+  color: #666666;
+}
+
+.add-user-header-btn {
+  width: 100%;
+}
+
+@media(min-width: 768px) {
+  .add-user-header-btn {
+    width: auto;
+  }
+}
+
+.users-error-banner {
+  background-color: #ff4d4d;
+  color: #ffffff;
+  border: 3px solid #000000;
+  padding: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.user-role-badge-inline {
+  display: inline-block;
+  padding: 2px 6px;
+  font-size: 11px;
+  font-weight: 800;
+  border: 2px solid #000000;
+  text-transform: uppercase;
+}
+
+.user-role-badge-inline.admin {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+.user-role-badge-inline.agent {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.user-role-badge-inline.customer {
+  background-color: #e0e0e0;
+  color: #666666;
+  border-color: #666666;
+}
+
+.user-status-pill {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.user-status-pill.active {
+  color: #2bb32b;
+}
+
+.user-status-pill.inactive {
+  color: #ff4d4d;
+  text-decoration: line-through;
+}
+
+.user-action-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.edit-icon-btn, .delete-icon-btn {
+  padding: 6px !important;
+}
+
+.user-form {
+  display: flex;
+  flex-direction: column;
+}

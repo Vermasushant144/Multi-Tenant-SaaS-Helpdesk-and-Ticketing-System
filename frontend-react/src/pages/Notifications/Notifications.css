@@ -1,0 +1,173 @@
+.notifications-page-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.notifications-success-banner {
+  background-color: #33cc33;
+  color: #ffffff;
+  border: 3px solid #000000;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.notifications-error-banner {
+  background-color: #ff4d4d;
+  color: #ffffff;
+  border: 3px solid #000000;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.notifications-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media(min-width: 992px) {
+  .notifications-grid {
+    grid-template-columns: 3fr 2fr;
+  }
+}
+
+.notifications-feed-card, .notifications-settings-card {
+  margin-bottom: 0;
+}
+
+.notifications-list-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 550px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.feed-item-card {
+  border: 3px solid #000000;
+  padding: 16px;
+  background-color: #ffffff;
+  box-shadow: 2px 2px 0px 0px #000000;
+}
+
+.feed-item-card.unread {
+  background-color: #f9f9f9;
+  border-left-width: 6px;
+}
+
+.feed-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 9px;
+  font-weight: 800;
+  color: #666666;
+  margin-bottom: 6px;
+}
+
+.feed-item-type {
+  text-transform: uppercase;
+  background-color: #000000;
+  color: #ffffff;
+  padding: 1px 6px;
+}
+
+.feed-item-time {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.feed-item-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 800;
+  color: #000000;
+  margin-bottom: 4px;
+}
+
+.feed-item-desc {
+  font-size: 12px;
+  color: #333333;
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+
+.empty-notifications-feed {
+  text-align: center;
+  padding: 32px;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 800;
+  color: #888888;
+  border: 3px dashed #000000;
+}
+
+.preference-option-box {
+  border: 3px solid #000000;
+  padding: 16px;
+  background-color: #ffffff;
+}
+
+.preference-option-box:hover {
+  background-color: #fafafa;
+}
+
+.label-text-combo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.channel-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #000000;
+}
+
+.channel-desc {
+  font-size: 11px;
+  color: #666666;
+  font-weight: 500;
+}
+
+.telegram-fields {
+  border-width: 3px;
+  box-shadow: 2px 2px 0px 0px #000000;
+  background-color: #fdfdfd;
+  padding: 16px;
+}
+
+.telegram-fields-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 800;
+  border-bottom: 2px solid #000000;
+  padding-bottom: 6px;
+  margin-bottom: 12px;
+}
+
+.help-text {
+  font-size: 10px;
+  color: #666666;
+  margin-top: 4px;
+}
+
+.w-100 {
+  width: 100%;
+}

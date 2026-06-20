@@ -1,0 +1,19 @@
+.confirm-dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.confirm-dialog-message {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  font-weight: 500;
+  color: #000000;
+  line-height: 1.6;
+}
+
+.confirm-dialog-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}

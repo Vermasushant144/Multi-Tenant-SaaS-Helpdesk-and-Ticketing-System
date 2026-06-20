@@ -1,0 +1,57 @@
+.ticket-title-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ticket-title-text {
+  font-weight: 700;
+  color: #000000;
+}
+
+.ticket-company-text {
+  font-size: 11px;
+  color: #666666;
+  text-transform: uppercase;
+}
+
+.priority-badge {
+  display: inline-block;
+  padding: 2px 6px;
+  font-size: 11px;
+  font-weight: 800;
+  border: 2px solid #000000;
+}
+
+.priority-badge.high {
+  background-color: #ff4d4d;
+  color: #ffffff;
+}
+
+.priority-badge.medium {
+  background-color: #ffcc00;
+  color: #000000;
+}
+
+.priority-badge.low {
+  background-color: #3399ff;
+  color: #ffffff;
+}
+
+.table-assignee {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.font-bold {
+  font-weight: 800;
+}
+
+.table-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
