@@ -3,9 +3,9 @@ import axios from 'axios';
 
 const AuthContext = createContext(null);
 
-// axios instance — uses Vite proxy (/api → localhost:8081)
+// axios instance — uses env var in production, Vite proxy in dev
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
   headers: { 'Content-Type': 'application/json' }
 });
 
