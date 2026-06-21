@@ -1,139 +1,117 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { getUsers, setUsers, initStore } from '../services/mockData';
+import axios from 'axios';
 
 const AuthContext = createContext(null);
+
+// axios instance that always sends to backend on port 8081
+const api = axios.create({
+  baseURL: 'http://localhost:8081/api',
+  headers: { 'Content-Type': 'application/json' }
+});
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // On app start — read saved user from localStorage (so refresh doesn't log you out)
   useEffect(() => {
-    initStore();
     const storedUser = localStorage.getItem('bd_current_user');
-    if (storedUser) {
+    const storedToken = localStorage.getItem('bd_token');
+    if (storedUser && storedToken) {
       setUser(JSON.parse(storedUser));
     }
     setLoading(false);
   }, []);
 
+  // ─── LOGIN ──────────────────────────────────────────────────────
+  // Calls POST /api/auth/login → gets token + user info back from backend
   const login = async (email, password) => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const users = getUsers();
-        const found = users.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
-        
-        if (found) {
-          if (found.status === 'INACTIVE') {
-            reject(new Error('This account has been deactivated.'));
-            return;
-          }
-          const userPayload = { ...found };
-          delete userPayload.password;
-          setUser(userPayload);
-          localStorage.setItem('bd_current_user', JSON.stringify(userPayload));
-          resolve(userPayload);
-        } else {
-          reject(new Error('Invalid email or password.'));
-        }
-      }, 500);
-    });
+    const response = await api.post('/auth/login', { email, password });
+    const data = response.data;
+
+    // Save JWT token separately (used in future API calls)
+    localStorage.setItem('bd_token', data.token);
+
+    // Save user info (shown in sidebar, header, etc.)
+    const userPayload = {
+      id: data.userId,
+      name: data.name,
+      email: data.email,
+      role: data.role,
+      tenantId: data.tenantId,
+      company: data.company
+    };
+    localStorage.setItem('bd_current_user', JSON.stringify(userPayload));
+    setUser(userPayload);
+
+    return userPayload;
   };
 
+  // ─── REGISTER ──────────────────────────────────────────────────
+  // Calls POST /api/auth/register → creates company + admin user in DB
   const register = async (companyName, fullName, email, password) => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const users = getUsers();
-        const exists = users.some(u => u.email.toLowerCase() === email.toLowerCase());
-        
-        if (exists) {
-          reject(new Error('Email is already registered.'));
-          return;
-        }
-
-        const newUser = {
-          id: `U-${users.length + 1}`,
-          name: fullName,
-          email: email,
-          password: password,
-          role: 'ADMIN', // default registered user is admin of their tenant
-          company: companyName,
-          status: 'ACTIVE'
-        };
-
-        const updatedUsers = [...users, newUser];
-        setUsers(updatedUsers);
-
-        // Auto login
-        const userPayload = { ...newUser };
-        delete userPayload.password;
-        setUser(userPayload);
-        localStorage.setItem('bd_current_user', JSON.stringify(userPayload));
-        resolve(userPayload);
-      }, 500);
+    const response = await api.post('/auth/register', {
+      companyName,
+      fullName,
+      email,
+      password
     });
+    const data = response.data;
+
+    localStorage.setItem('bd_token', data.token);
+
+    const userPayload = {
+      id: data.userId,
+      name: data.name,
+      email: data.email,
+      role: data.role,
+      tenantId: data.tenantId,
+      company: data.company
+    };
+    localStorage.setItem('bd_current_user', JSON.stringify(userPayload));
+    setUser(userPayload);
+
+    return userPayload;
   };
 
+  // ─── LOGOUT ────────────────────────────────────────────────────
+  // Just clears localStorage — no backend call needed (JWT is stateless)
   const logout = () => {
     setUser(null);
+    localStorage.removeItem('bd_token');
     localStorage.removeItem('bd_current_user');
   };
 
-  const updateProfile = async (name, email, company, telegramUsername) => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (!user) {
-          reject(new Error('Not authenticated'));
-          return;
-        }
-        const users = getUsers();
-        const idx = users.findIndex(u => u.id === user.id);
-        if (idx !== -1) {
-          users[idx].name = name;
-          users[idx].email = email;
-          users[idx].company = company;
-          users[idx].telegramUsername = telegramUsername;
-          setUsers(users);
-
-          const updatedUser = { ...user, name, email, company, telegramUsername };
-          setUser(updatedUser);
-          localStorage.setItem('bd_current_user', JSON.stringify(updatedUser));
-          resolve(updatedUser);
-        } else {
-          reject(new Error('User not found'));
-        }
-      }, 500);
-    });
+  // ─── UPDATE PROFILE (mock for now — backend endpoint to be added) ─
+  const updateProfile = async (name, email, company) => {
+    // TODO: Replace with real API call when backend endpoint is ready
+    const updatedUser = { ...user, name, email, company };
+    setUser(updatedUser);
+    localStorage.setItem('bd_current_user', JSON.stringify(updatedUser));
+    return updatedUser;
   };
 
+  // ─── CHANGE PASSWORD (mock for now) ────────────────────────────
   const changePassword = async (oldPassword, newPassword) => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (!user) {
-          reject(new Error('Not authenticated'));
-          return;
-        }
-        const users = getUsers();
-        const idx = users.findIndex(u => u.id === user.id);
-        if (idx !== -1) {
-          if (users[idx].password !== oldPassword) {
-            reject(new Error('Incorrect current password'));
-            return;
-          }
-          users[idx].password = newPassword;
-          setUsers(users);
-          resolve();
-        } else {
-          reject(new Error('User not found'));
-        }
-      }, 500);
-    });
+    // TODO: Replace with real API call when backend endpoint is ready
+    return Promise.resolve();
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout, updateProfile, changePassword, isAuthenticated: !!user }}>
+    <AuthContext.Provider value={{
+      user,
+      loading,
+      login,
+      register,
+      logout,
+      updateProfile,
+      changePassword,
+      isAuthenticated: !!user
+    }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
 export const useAuth = () => useContext(AuthContext);
+
