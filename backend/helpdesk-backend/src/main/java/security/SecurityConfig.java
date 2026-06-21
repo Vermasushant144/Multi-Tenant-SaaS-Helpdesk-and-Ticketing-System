@@ -35,7 +35,11 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // Anyone can call login and register — no token needed
                 .requestMatchers("/api/auth/**").permitAll()
-                // Everything else requires a valid JWT token
+                // Static assets and files
+                .requestMatchers("/", "/index.html", "/assets/**", "/favicon.ico", "/*.png", "/*.svg").permitAll()
+                // React Router fallback mappings
+                .requestMatchers("/{spring:[a-zA-Z0-9-_]+}", "/**/{spring:[a-zA-Z0-9-_]+}").permitAll()
+                // Everything else requires a valid JWT token (our protected API endpoints)
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
