@@ -11,8 +11,14 @@ public class Tenant {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 100)
+    @Column(name = "company_name", nullable = false, length = 100)
     private String name;
+
+    @Column(name = "name", nullable = false, length = 100)
+    private String displayName;
+
+    @Column(name = "company_code", nullable = false, unique = true, length = 50)
+    private String companyCode;
 
     @Column(unique = true, length = 100)
     private String domain;
@@ -20,12 +26,13 @@ public class Tenant {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    // Constructors
     public Tenant() {}
 
-    public Tenant(Long id, String name, String domain, LocalDateTime createdAt) {
+    public Tenant(Long id, String name, String displayName, String companyCode, String domain, LocalDateTime createdAt) {
         this.id = id;
         this.name = name;
+        this.displayName = displayName;
+        this.companyCode = companyCode;
         this.domain = domain;
         this.createdAt = createdAt;
     }
@@ -33,9 +40,19 @@ public class Tenant {
     @PrePersist
     public void prePersist() {
         this.createdAt = LocalDateTime.now();
+        if (this.displayName == null && this.name != null) {
+            this.displayName = this.name;
+        }
+        if (this.companyCode == null && this.name != null) {
+            String base = this.name.replaceAll("[^A-Za-z0-9]", "").toUpperCase();
+            if (base.isEmpty()) {
+                base = "TENANT";
+            }
+            this.companyCode = base.substring(0, Math.min(base.length(), 6))
+                    + System.currentTimeMillis() % 100000;
+        }
     }
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -50,6 +67,22 @@ public class Tenant {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 
     public String getDomain() {
@@ -68,7 +101,6 @@ public class Tenant {
         this.createdAt = createdAt;
     }
 
-    // Builder Pattern
     public static TenantBuilder builder() {
         return new TenantBuilder();
     }
@@ -76,6 +108,8 @@ public class Tenant {
     public static class TenantBuilder {
         private Long id;
         private String name;
+        private String displayName;
+        private String companyCode;
         private String domain;
         private LocalDateTime createdAt;
 
@@ -86,6 +120,16 @@ public class Tenant {
 
         public TenantBuilder name(String name) {
             this.name = name;
+            return this;
+        }
+
+        public TenantBuilder displayName(String displayName) {
+            this.displayName = displayName;
+            return this;
+        }
+
+        public TenantBuilder companyCode(String companyCode) {
+            this.companyCode = companyCode;
             return this;
         }
 
@@ -100,7 +144,7 @@ public class Tenant {
         }
 
         public Tenant build() {
-            return new Tenant(id, name, domain, createdAt);
+            return new Tenant(id, name, displayName, companyCode, domain, createdAt);
         }
     }
 }

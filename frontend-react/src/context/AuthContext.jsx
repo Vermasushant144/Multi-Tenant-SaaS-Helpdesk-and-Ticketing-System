@@ -3,9 +3,9 @@ import axios from 'axios';
 
 const AuthContext = createContext(null);
 
-// axios instance that always sends to backend on port 8081
+// axios instance — uses Vite proxy (/api → localhost:8081)
 const api = axios.create({
-  baseURL: 'http://localhost:8081/api',
+  baseURL: '/api',
   headers: { 'Content-Type': 'application/json' }
 });
 
@@ -26,7 +26,13 @@ export const AuthProvider = ({ children }) => {
   // ─── LOGIN ──────────────────────────────────────────────────────
   // Calls POST /api/auth/login → gets token + user info back from backend
   const login = async (email, password) => {
-    const response = await api.post('/auth/login', { email, password });
+    let response;
+    try {
+      response = await api.post('/auth/login', { email, password });
+    } catch (err) {
+      const message = err.response?.data?.error || err.message || 'Authentication failed';
+      throw new Error(message);
+    }
     const data = response.data;
 
     // Save JWT token separately (used in future API calls)
@@ -50,12 +56,18 @@ export const AuthProvider = ({ children }) => {
   // ─── REGISTER ──────────────────────────────────────────────────
   // Calls POST /api/auth/register → creates company + admin user in DB
   const register = async (companyName, fullName, email, password) => {
-    const response = await api.post('/auth/register', {
-      companyName,
-      fullName,
-      email,
-      password
-    });
+    let response;
+    try {
+      response = await api.post('/auth/register', {
+        companyName,
+        fullName,
+        email,
+        password
+      });
+    } catch (err) {
+      const message = err.response?.data?.error || err.message || 'Registration failed';
+      throw new Error(message);
+    }
     const data = response.data;
 
     localStorage.setItem('bd_token', data.token);
