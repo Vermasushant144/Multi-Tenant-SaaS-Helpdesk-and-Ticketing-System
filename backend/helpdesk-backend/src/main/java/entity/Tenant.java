@@ -20,7 +20,7 @@ public class Tenant {
     @Column(name = "company_code", nullable = false, unique = true, length = 50)
     private String companyCode;
 
-    @Column(unique = true, length = 100)
+    @Column(length = 100)
     private String domain;
 
     @Column(name = "created_at")
