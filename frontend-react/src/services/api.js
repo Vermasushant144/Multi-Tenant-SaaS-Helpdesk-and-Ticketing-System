@@ -13,10 +13,9 @@ const api = axios.create({
 // Setup request interceptor to add auth token
 api.interceptors.request.use(
   (config) => {
-    const user = localStorage.getItem('bd_current_user');
-    if (user) {
-      const parsed = JSON.parse(user);
-      config.headers.Authorization = `Bearer MOCK_TOKEN_${parsed.id}`;
+    const token = localStorage.getItem('bd_token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },

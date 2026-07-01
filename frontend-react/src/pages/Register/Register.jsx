@@ -23,6 +23,19 @@ const Register = () => {
       return;
     }
 
+    // Email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError('INVALID_EMAIL_FORMAT');
+      return;
+    }
+
+    // Password length validation
+    if (password.length < 6) {
+      setError('PASSWORD_TOO_SHORT');
+      return;
+    }
+
     setLoading(true);
     try {
       await register(companyName, fullName, email, password);
@@ -45,7 +58,10 @@ const Register = () => {
 
         {error && (
           <div className="register-error-banner">
-            <strong>ERROR:</strong> {error}
+            <strong>ERROR:</strong> {error === 'ALL_FIELDS_REQUIRED' ? 'All fields are required'
+                                  : error === 'INVALID_EMAIL_FORMAT' ? 'Please enter a valid email address'
+                                  : error === 'PASSWORD_TOO_SHORT' ? 'Password must be at least 6 characters long'
+                                  : error}
           </div>
         )}
 

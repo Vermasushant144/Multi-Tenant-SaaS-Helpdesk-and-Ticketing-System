@@ -7,6 +7,7 @@ import './Login.css';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [role, setRole] = useState('USER');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
@@ -16,14 +17,27 @@ const Login = () => {
     e.preventDefault();
     setError('');
     
-    if (!email || !password) {
+    if (!email || !password || !role) {
       setError('ALL_FIELDS_REQUIRED');
+      return;
+    }
+
+    // Email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError('INVALID_EMAIL_FORMAT');
+      return;
+    }
+
+    // Password length validation
+    if (password.length < 6) {
+      setError('PASSWORD_TOO_SHORT');
       return;
     }
 
     setLoading(true);
     try {
-      await login(email, password);
+      await login(email, password, role);
       navigate('/dashboard');
     } catch (err) {
       setError(err.message || 'AUTHENTICATION_FAILED');
@@ -43,7 +57,10 @@ const Login = () => {
 
         {error && (
           <div className="login-error-banner">
-            <strong>ERROR:</strong> {error}
+            <strong>ERROR:</strong> {error === 'ALL_FIELDS_REQUIRED' ? 'All fields are required' 
+                                  : error === 'INVALID_EMAIL_FORMAT' ? 'Please enter a valid email address' 
+                                  : error === 'PASSWORD_TOO_SHORT' ? 'Password must be at least 6 characters long' 
+                                  : error}
           </div>
         )}
 
@@ -76,6 +93,33 @@ const Login = () => {
               required
               disabled={loading}
             />
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">
+              LOGIN_AS_ROLE
+            </label>
+            <select
+              className="form-select"
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              disabled={loading}
+              style={{
+                width: '100%',
+                padding: '12px',
+                border: '3px solid #000000',
+                backgroundColor: '#ffffff',
+                fontFamily: 'monospace',
+                fontSize: '13px',
+                fontWeight: 'bold',
+                outline: 'none',
+                cursor: 'pointer',
+                marginBottom: '16px'
+              }}
+            >
+              <option value="USER">USER</option>
+              <option value="ADMIN">ADMIN</option>
+            </select>
           </div>
 
           <button type="submit" className="btn btn-primary login-submit-btn" disabled={loading}>

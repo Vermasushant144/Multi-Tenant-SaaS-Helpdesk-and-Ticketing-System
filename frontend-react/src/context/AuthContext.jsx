@@ -25,10 +25,10 @@ export const AuthProvider = ({ children }) => {
 
   // ─── LOGIN ──────────────────────────────────────────────────────
   // Calls POST /api/auth/login → gets token + user info back from backend
-  const login = async (email, password) => {
+  const login = async (email, password, role) => {
     let response;
     try {
-      response = await api.post('/auth/login', { email, password });
+      response = await api.post('/auth/login', { email, password, role });
     } catch (err) {
       const message = err.response?.data?.error || err.message || 'Authentication failed';
       throw new Error(message);
