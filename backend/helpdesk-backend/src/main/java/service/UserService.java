@@ -33,6 +33,13 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    // Get all users in the database (across all tenants)
+    public List<UserResponse> getAllUsers() {
+        return userRepository.findAll().stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+    }
+
     // Get all agents/admins in the tenant
     public List<UserResponse> getAgentsByTenant(Long tenantId) {
         return userRepository.findByTenantId(tenantId).stream()
@@ -68,16 +75,11 @@ public class UserService {
         return mapToResponse(user);
     }
 
-    // Update an existing user in the tenant
+    // Update an existing user
     @Transactional
-    public UserResponse updateUser(Long userId, UpdateUserRequest request, Long tenantId) {
+    public UserResponse updateUser(Long userId, UpdateUserRequest request) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found."));
-
-        // Verify tenancy
-        if (!user.getTenant().getId().equals(tenantId)) {
-            throw new RuntimeException("Unauthorized: User does not belong to your organization.");
-        }
 
         // Verify email uniqueness
         if (userRepository.existsByEmailAndIdNot(request.getEmail(), userId)) {
@@ -97,16 +99,11 @@ public class UserService {
         return mapToResponse(user);
     }
 
-    // Delete a user in the tenant
+    // Delete a user
     @Transactional
-    public void deleteUser(Long userId, Long tenantId) {
+    public void deleteUser(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found."));
-
-        // Verify tenancy
-        if (!user.getTenant().getId().equals(tenantId)) {
-            throw new RuntimeException("Unauthorized: User does not belong to your organization.");
-        }
 
         userRepository.delete(user);
 

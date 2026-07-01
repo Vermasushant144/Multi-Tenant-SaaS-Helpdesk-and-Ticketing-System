@@ -33,7 +33,7 @@ public class UserController {
                     .body(Map.of("error", "Access denied. Admins only."));
         }
 
-        List<UserResponse> users = userService.getUsersByTenant(currentUser.getTenant().getId());
+        List<UserResponse> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
 
@@ -72,7 +72,7 @@ public class UserController {
         }
 
         try {
-            UserResponse updatedUser = userService.updateUser(id, request, currentUser.getTenant().getId());
+            UserResponse updatedUser = userService.updateUser(id, request);
             return ResponseEntity.ok(updatedUser);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
@@ -89,7 +89,7 @@ public class UserController {
         }
 
         try {
-            userService.deleteUser(id, currentUser.getTenant().getId());
+            userService.deleteUser(id);
             return ResponseEntity.ok(Map.of("message", "User deleted successfully."));
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));

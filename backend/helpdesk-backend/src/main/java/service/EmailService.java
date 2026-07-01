@@ -42,7 +42,7 @@ public class EmailService {
                 System.err.println("Failed to send email. Response: " + response.getBody());
             }
         } catch (Exception e) {
-            System.err.println("Error while sending email to " + to + ": " + e.getMessage());
+            System.err.println("Error while sending email: " + e.getMessage());
         }
     }
 
@@ -50,16 +50,15 @@ public class EmailService {
         String subject = "Account Created - Welcome to SaaS Helpdesk";
         String htmlContent = String.format(
                 "<h3>Welcome to SaaS Helpdesk</h3>" +
-                "<p>Hello <strong>%s</strong>,</p>" +
-                "<p>Your account has been successfully created with the following details:</p>" +
-                "<ul>" +
-                "  <li><strong>Email:</strong> %s</li>" +
-                "  <li><strong>Role:</strong> %s</li>" +
-                "  <li><strong>Status:</strong> %s</li>" +
-                "</ul>" +
-                "<p>Please sign in using your credentials.</p>",
-                name, to, role, status
-        );
+                        "<p>Hello <strong>%s</strong>,</p>" +
+                        "<p>Your account has been successfully created with the following details:</p>" +
+                        "<ul>" +
+                        "  <li><strong>Email:</strong> %s</li>" +
+                        "  <li><strong>Role:</strong> %s</li>" +
+                        "  <li><strong>Status:</strong> %s</li>" +
+                        "</ul>" +
+                        "<p>Please sign in using your credentials.</p>",
+                name, to, role, status);
         sendHtmlEmail(to, subject, htmlContent);
     }
 
@@ -67,15 +66,14 @@ public class EmailService {
         String subject = "Account Updated - SaaS Helpdesk";
         String htmlContent = String.format(
                 "<h3>Account Details Updated</h3>" +
-                "<p>Hello <strong>%s</strong>,</p>" +
-                "<p>Your account details have been updated:</p>" +
-                "<ul>" +
-                "  <li><strong>Email:</strong> %s</li>" +
-                "  <li><strong>Role:</strong> %s</li>" +
-                "  <li><strong>Status:</strong> %s</li>" +
-                "</ul>",
-                name, to, role, status
-        );
+                        "<p>Hello <strong>%s</strong>,</p>" +
+                        "<p>Your account details have been updated:</p>" +
+                        "<ul>" +
+                        "  <li><strong>Email:</strong> %s</li>" +
+                        "  <li><strong>Role:</strong> %s</li>" +
+                        "  <li><strong>Status:</strong> %s</li>" +
+                        "</ul>",
+                name, to, role, status);
         sendHtmlEmail(to, subject, htmlContent);
     }
 
@@ -83,10 +81,9 @@ public class EmailService {
         String subject = "Account Deleted - SaaS Helpdesk";
         String htmlContent = String.format(
                 "<h3>Account Deleted</h3>" +
-                "<p>Hello <strong>%s</strong>,</p>" +
-                "<p>Your account has been deleted/removed from our system.</p>",
-                name
-        );
+                        "<p>Hello <strong>%s</strong>,</p>" +
+                        "<p>Your account has been deleted/removed from our system.</p>",
+                name);
         sendHtmlEmail(to, subject, htmlContent);
     }
 
@@ -94,17 +91,16 @@ public class EmailService {
         String subject = "Ticket Created - #" + ticketId + ": " + title;
         String htmlContent = String.format(
                 "<h3>Ticket Raised Successfully</h3>" +
-                "<p>Hello,</p>" +
-                "<p>Your ticket has been registered in our helpdesk system:</p>" +
-                "<ul>" +
-                "  <li><strong>Ticket ID:</strong> #%d</li>" +
-                "  <li><strong>Subject:</strong> %s</li>" +
-                "  <li><strong>Priority:</strong> %s</li>" +
-                "  <li><strong>Description:</strong> %s</li>" +
-                "</ul>" +
-                "<p>Our support agents will review it shortly.</p>",
-                ticketId, title, priority, description != null ? description : "No description provided."
-        );
+                        "<p>Hello,</p>" +
+                        "<p>Your ticket has been registered in our helpdesk system:</p>" +
+                        "<ul>" +
+                        "  <li><strong>Ticket ID:</strong> #%d</li>" +
+                        "  <li><strong>Subject:</strong> %s</li>" +
+                        "  <li><strong>Priority:</strong> %s</li>" +
+                        "  <li><strong>Description:</strong> %s</li>" +
+                        "</ul>" +
+                        "<p>Our support agents will review it shortly.</p>",
+                ticketId, title, priority, description != null ? description : "No description provided.");
         sendHtmlEmail(to, subject, htmlContent);
     }
 }
