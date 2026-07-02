@@ -13,9 +13,16 @@ import java.util.Map;
 @Service
 public class EmailService {
 
-    private final String apiKey = "re_3bp5p2v1_MfcseNgy4p6y3BYmK1cdcCvx";
+    private final String apiKey = "re_AmRjr4yA_JQVXnzk8cfKgfBxh7kcYh7dT";
     private final String resendUrl = "https://api.resend.com/emails";
     private final RestTemplate restTemplate;
+
+    // ─── TESTING MODE ──────────────────────────────────────────────
+    // Resend ke free plan mein bina verified domain ke sirf apne
+    // registered email pe hi bhej sakte ho.
+    // Jab domain verify ho jaye, is line ko hata do aur niche
+    // sendHtmlEmail(to, ...) use karo directly.
+    private static final String TESTING_RECIPIENT = "vermasushant144@gmail.com";
 
     public EmailService() {
         this.restTemplate = new RestTemplate();
@@ -59,7 +66,7 @@ public class EmailService {
                         "</ul>" +
                         "<p>Please sign in using your credentials.</p>",
                 name, to, role, status);
-        sendHtmlEmail(to, subject, htmlContent);
+        sendHtmlEmail(TESTING_RECIPIENT, subject, htmlContent);
     }
 
     public void sendUserUpdatedEmail(String to, String name, String role, String status) {
@@ -74,7 +81,7 @@ public class EmailService {
                         "  <li><strong>Status:</strong> %s</li>" +
                         "</ul>",
                 name, to, role, status);
-        sendHtmlEmail(to, subject, htmlContent);
+        sendHtmlEmail(TESTING_RECIPIENT, subject, htmlContent);
     }
 
     public void sendUserDeletedEmail(String to, String name) {
@@ -84,7 +91,7 @@ public class EmailService {
                         "<p>Hello <strong>%s</strong>,</p>" +
                         "<p>Your account has been deleted/removed from our system.</p>",
                 name);
-        sendHtmlEmail(to, subject, htmlContent);
+        sendHtmlEmail(TESTING_RECIPIENT, subject, htmlContent);
     }
 
     public void sendTicketCreatedEmail(String to, Long ticketId, String title, String priority, String description) {
@@ -92,7 +99,8 @@ public class EmailService {
         String htmlContent = String.format(
                 "<h3>Ticket Raised Successfully</h3>" +
                         "<p>Hello,</p>" +
-                        "<p>Your ticket has been registered in our helpdesk system:</p>" +
+                        "<p>A ticket was created by: <strong>%s</strong></p>" +
+                        "<p>Ticket details:</p>" +
                         "<ul>" +
                         "  <li><strong>Ticket ID:</strong> #%d</li>" +
                         "  <li><strong>Subject:</strong> %s</li>" +
@@ -100,7 +108,10 @@ public class EmailService {
                         "  <li><strong>Description:</strong> %s</li>" +
                         "</ul>" +
                         "<p>Our support agents will review it shortly.</p>",
-                ticketId, title, priority, description != null ? description : "No description provided.");
-        sendHtmlEmail(to, subject, htmlContent);
+                to, ticketId, title, priority, description != null ? description : "No description provided.");
+        // ─── TESTING MODE: Send to verified address ───────────────
+        // In production (after domain verify), replace TESTING_RECIPIENT with: to
+        sendHtmlEmail(TESTING_RECIPIENT, subject, htmlContent);
     }
 }
+

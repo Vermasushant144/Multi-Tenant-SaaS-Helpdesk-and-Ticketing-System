@@ -1,0 +1,15 @@
+{
+  "name": "email-testing-playwright",
+  "version": "1.0.0",
+  "description": "Playwright End-to-End Email testing suite",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "show-report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.44.0"
+  }
+}

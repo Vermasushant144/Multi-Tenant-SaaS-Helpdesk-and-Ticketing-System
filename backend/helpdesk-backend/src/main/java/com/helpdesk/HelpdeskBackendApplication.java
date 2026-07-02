@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @ComponentScan(basePackages = {"com.helpdesk", "config", "controller", "security", "service"})
 @org.springframework.boot.persistence.autoconfigure.EntityScan(basePackages = {"entity"})
 @EnableJpaRepositories(basePackages = {"repository"})
+@org.springframework.scheduling.annotation.EnableScheduling
 public class HelpdeskBackendApplication {
 
 	public static void main(String[] args) {

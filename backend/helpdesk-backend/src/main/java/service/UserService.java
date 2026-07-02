@@ -19,11 +19,13 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
+    private final TelegramService telegramService;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, EmailService emailService) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, EmailService emailService, TelegramService telegramService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
+        this.telegramService = telegramService;
     }
 
     // Get all users in the tenant
@@ -71,6 +73,24 @@ public class UserService {
 
         // Send email
         emailService.sendUserCreatedEmail(user.getEmail(), user.getName(), user.getRole().name(), user.getStatus().name());
+
+        // Send Telegram Notification
+        String telegramMessage = String.format(
+                "<b>👤 Event: New User Onboarded</b>\n\n" +
+                "<b>Name:</b> %s\n" +
+                "<b>Email:</b> %s\n" +
+                "<b>Role:</b> %s\n" +
+                "<b>Status:</b> %s\n" +
+                "<b>Tenant:</b> %s\n" +
+                "<b>Time:</b> %s",
+                user.getName(),
+                user.getEmail(),
+                user.getRole().name(),
+                user.getStatus().name(),
+                tenant.getName(),
+                java.time.LocalDateTime.now().toString()
+        );
+        telegramService.sendNotification(telegramMessage);
 
         return mapToResponse(user);
     }

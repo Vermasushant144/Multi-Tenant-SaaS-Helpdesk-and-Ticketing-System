@@ -16,10 +16,12 @@ public class TicketService {
 
     private final TicketRepository ticketRepository;
     private final EmailService emailService;
+    private final TelegramService telegramService;
 
-    public TicketService(TicketRepository ticketRepository, EmailService emailService) {
+    public TicketService(TicketRepository ticketRepository, EmailService emailService, TelegramService telegramService) {
         this.ticketRepository = ticketRepository;
         this.emailService = emailService;
+        this.telegramService = telegramService;
     }
 
     // List all tickets in the tenant
@@ -52,6 +54,28 @@ public class TicketService {
                 ticket.getPriority(),
                 ticket.getDescription()
         );
+
+        // Send Telegram Notification
+        String telegramMessage = String.format(
+                "<b>🎫 Event: New Ticket Raised</b>\n\n" +
+                "<b>Ticket ID:</b> #%d\n" +
+                "<b>Subject:</b> %s\n" +
+                "<b>Priority:</b> %s\n" +
+                "<b>Creator Name:</b> %s\n" +
+                "<b>Creator Email:</b> %s\n" +
+                "<b>Tenant:</b> %s\n" +
+                "<b>Details:</b> %s\n" +
+                "<b>Time:</b> %s",
+                ticket.getId(),
+                ticket.getTitle(),
+                ticket.getPriority(),
+                ticket.getCreatorName(),
+                ticket.getCreatorEmail(),
+                currentUser.getTenant().getName(),
+                ticket.getDescription() != null ? ticket.getDescription() : "No details provided.",
+                ticket.getCreatedAt() != null ? ticket.getCreatedAt().toString() : java.time.LocalDateTime.now().toString()
+        );
+        telegramService.sendNotification(telegramMessage);
 
         return mapToResponse(ticket);
     }
